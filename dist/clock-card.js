@@ -7,9 +7,7 @@ function leadingZero(numberString) {
     }
 }
 
-Date.prototype.format = function (formatString) {
-    var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+Date.prototype.format = function (formatString, locale) {
     var twlv = this.getHours() == 0 ? 12 : this.getHours() > 12 ? this.getHours() - 12 : this.getHours();
     var ampm = this.getHours() >= 12 ? "PM" : "AM";
 
@@ -33,10 +31,10 @@ Date.prototype.format = function (formatString) {
     formatString = formatString.replace(/D/g, this.getDate());
 
     formatString = formatString.replace(/a/g, ampm);
-    formatString = formatString.replace(/ZZZZ/g, monthNames[this.getMonth() + 12]);
-    formatString = formatString.replace(/ZZZ/g, monthNames[this.getMonth()]);
-    formatString = formatString.replace(/XXXX/g, dayNames[this.getDay() + 7]);
-    formatString = formatString.replace(/XXX/g, dayNames[this.getDay()]);
+    formatString = formatString.replace(/ZZZZ/g, Intl.DateTimeFormat(locale, { month: 'long' }).format(this));
+    formatString = formatString.replace(/ZZZ/g, Intl.DateTimeFormat(locale, { month: 'short' }).format(this));
+    formatString = formatString.replace(/XXXX/g, Intl.DateTimeFormat(locale, { weekday: 'long' }).format(this));
+    formatString = formatString.replace(/XXX/g, Intl.DateTimeFormat(locale, { weekday: 'short' }).format(this));
     return formatString;
 };
 
@@ -49,6 +47,8 @@ class ClockCard extends HTMLElement {
     set hass(hass) {
         if (!this.content) {
             var config = this.config;
+        	var locale = hass.language;
+    		if (config.locale) locale = config.locale;
             var theme = config.theme ? config.theme : {};
             var clock_size = config.size ? config.size : 300;
             var font_size = config.font_size ? config.font_size : 20;
@@ -73,7 +73,7 @@ class ClockCard extends HTMLElement {
             }
             var timezone_html = caption ? `<p id="time_caption" style="font-size:${font_size}px">${caption}</p>` : "";
             var now = config.time_zone ? timezoneTime(config.time_zone) : new Date();
-            timezone_html = config.display_date ? timezone_html + `<p id="display_date" style="font-size:${font_size}px">${now.format(config.display_date)}</p>` : timezone_html;
+            timezone_html = config.display_date ? timezone_html + `<p id="display_date" style="font-size:${font_size}px">${now.format(config.display_date, locale)}</p>` : timezone_html;
             this.content.innerHTML = `<canvas width="${clock_size}px" height="${clock_size}px"></canvas>${timezone_html}`;
             card.appendChild(this.content);
             this.appendChild(card);
