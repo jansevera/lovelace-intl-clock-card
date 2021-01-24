@@ -6,7 +6,7 @@ A simple analog clock card for Home Assistant. Colors are based on your current 
 
 ## About
 
-This card is based on Villhellm's [Lovelace Analog Clock Card](https://github.com/Villhellm/lovelace-clock-card). Rest in Peace, Villhellm! :-(
+This card is based on Villhellm's [Lovelace Analog Clock Card](https://github.com/Villhellm/lovelace-clock-card). [Rest in Peace](https://www.home-assistant.io/blog/2021/01/06/release-20211/#in-memoriam-of-villhellm), William! :cry:
 
 I've added locale support for day and month names.
 
