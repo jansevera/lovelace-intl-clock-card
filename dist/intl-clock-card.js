@@ -42,7 +42,7 @@ function timezoneTime(time_zone) {
     return new Date((new Date()).toLocaleString('en-US', {timeZone: time_zone}));
 }
 
-class ClockCard extends HTMLElement {
+class IntlClockCard extends HTMLElement {
 
     set hass(hass) {
         if (!this.content) {
@@ -183,4 +183,4 @@ class ClockCard extends HTMLElement {
     }
 }
 
-customElements.define('clock-card', ClockCard);
+customElements.define('intl-clock-card', IntlClockCard);
